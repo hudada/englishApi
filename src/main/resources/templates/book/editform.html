@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8"></meta>
+<title th:text="${title}"></title>
+<!-- Bootstrap -->
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"
+	media="screen" />
+<link th:href="@{/css/bootstrap-responsive.min.css}" rel="stylesheet"
+	media="screen" />
+<link th:href="@{/css/styles.css}" rel="stylesheet" media="screen" />
+</head>
+
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container-fluid">
+				<a class="btn btn-navbar" data-toggle="collapse"
+					data-target=".nav-collapse"> <span class="icon-bar"></span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span>
+				</a> <a class="brand" th:text="${title}"></a>
+				<div class="nav-collapse collapse">
+					<ul class="nav pull-right">
+						<li class="dropdown"><a th:inline="text" href="#"
+							role="button" class="dropdown-toggle" data-toggle="dropdown">
+								<i class="icon-user"></i>你好，[[${name}]]<i class="caret"></i>
+
+						</a>
+							<ul class="dropdown-menu">
+								<li class="divider"></li>
+								<li><a tabindex="-1" href="/logout">退出登录</a></li>
+							</ul></li>
+					</ul>
+					<ul class="nav">
+					</ul>
+				</div>
+				<!--/.nav-collapse -->
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span3" id="sidebar">
+				<ul id="ul_left"
+					class="nav nav-list bs-docs-sidenav nav-collapse collapse">
+				</ul>
+			</div>
+			<!--/span-->
+			<div class="span9" id="content">
+				<!-- validation -->
+				<div class="row-fluid">
+					<!-- block -->
+					<div class="block">
+						<div class="navbar navbar-inner block-header">
+							<div class="muted pull-left">修改文章</div>
+						</div>
+						<div class="block-content collapse in">
+							<div class="span12">
+								<!-- BEGIN FORM-->
+								<form action="#" id="form_sample_1" class="form-horizontal">
+									<fieldset>
+									
+										<div class="control-group">
+											<label class="control-label" for="focusedInput">名称</label>
+											<div class="controls">
+												<div>
+													<input th:value="${data.title}" id="ipt_0" class="input-xlarge focused" type="text"
+														placeholder="请输入名称" />
+												</div>
+											</div>
+										</div>
+										<div id="d_list">
+											<div th:each="list,listStat:${list}" th:id="${'div_'+listStat.index}" class="control-group">
+												<label th:inline="text" class="control-label" for="focusedInput">段落[[${listStat.index+1}]]</label>
+												<div class="controls">
+													<div>
+														<textarea th:text="${list.msg}" style="height: 150px;width: 500px;" id="ipt_1_1" class="input-xlarge focused" type="text"
+															placeholder="请输入内容" ></textarea>
+													</div>
+													
+													<div style="margin-top: 10px;">
+														<textarea th:text="${list.info}" style="height: 150px;width: 500px;" id="ipt_1_2" class="input-xlarge focused" type="text"
+															placeholder="请输入解释" ></textarea>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="control-group">
+											<div class="controls">
+												<div>
+													<button onclick="add_one()" type="button" class="btn">新增段落</button>
+													<button onclick="sub_one()" type="button" class="btn">删除段落</button>
+												</div>
+											</div>
+										</div>
+										
+										<div class="form-actions">
+										<button onclick="btn_cancel()" type="button" class="btn">取&nbsp;&nbsp;&nbsp;&nbsp;消</button>
+											<button type="button" onclick="return btn_ok()"
+												class="btn btn-primary">修&nbsp;&nbsp;&nbsp;&nbsp;改</button>
+										</div>
+									</fieldset>
+								</form>
+								<!-- END FORM-->
+							</div>
+						</div>
+					</div>
+					<!-- /block -->
+				</div>
+				<!-- /validation -->
+
+
+			</div>
+		</div>
+	</div>
+	<!--/.fluid-container-->
+	<link th:href="@{/vendors/datepicker.css}" rel="stylesheet"
+		media="screen" />
+	<link th:href="@{/vendors/uniform.default.css}" rel="stylesheet"
+		media="screen" />
+	<link th:href="@{/vendors/chosen.min.css}" rel="stylesheet"
+		media="screen" />
+
+	<link th:href="@{/vendors/wysiwyg/bootstrap-wysihtml5.css}"
+		rel="stylesheet" media="screen" />
+
+	<script th:src="@{/js/jquery-1.9.1.min.js}"></script>
+	<script th:src="@{/js/bootstrap.min.js}"></script>
+
+	<script th:src="@{/vendors/jquery.uniform.min.js}"></script>
+	<script th:src="@{/vendors/chosen.jquery.min.js}"></script>
+	<script th:src="@{/vendors/bootstrap-datepicker.js}"></script>
+
+	<script th:src="@{/vendors/wysiwyg/wysihtml5-0.3.0.js}"></script>
+	<script th:src="@{/vendors/wysiwyg/bootstrap-wysihtml5.js}"></script>
+
+	<script th:src="@{/vendors/wizard/jquery.bootstrap.wizard.min.js}"></script>
+
+	<script type="text/javascript"
+		th:src="@{/vendors/jquery-validation/dist/jquery.validate.min.js}"></script>
+	<script th:src="@{/assets/form-validation.js}"></script>
+
+	<script th:src="@{/assets/scripts.js}"></script>
+	<script th:inline="javascript">
+	/*<![CDATA[*/
+		jQuery(document).ready(function() {
+			$("#ul_left").html([[${left}]])
+			FormValidation.init();
+		});
+
+		$(function() {
+			$(".datepicker").datepicker();
+			$(".uniform_on").uniform();
+			$(".chzn-select").chosen();
+			$('.textarea').wysihtml5();
+
+			$('#rootwizard').bootstrapWizard(
+					{
+						onTabShow : function(tab, navigation, index) {
+							var $total = navigation.find('li').length;
+							var $current = index + 1;
+							var $percent = ($current / $total) * 100;
+							$('#rootwizard').find('.bar').css({
+								width : $percent + '%'
+							});
+							// If it's the last tab then hide the last button and show the finish instead
+							if ($current >= $total) {
+								$('#rootwizard').find('.pager .next').hide();
+								$('#rootwizard').find('.pager .finish').show();
+								$('#rootwizard').find('.pager .finish')
+										.removeClass('disabled');
+							} else {
+								$('#rootwizard').find('.pager .next').show();
+								$('#rootwizard').find('.pager .finish').hide();
+							}
+						}
+					});
+			$('#rootwizard .finish').click(function() {
+				alert('Finished!, Starting over!');
+				$('#rootwizard').find("a[href*='tab1']").trigger('click');
+			});
+		});
+		
+		var curr = /*[[${total}]]*/;
+		var limit = curr;
+		
+		function btn_cancel() {
+			history.back();
+		}
+		
+		function add_one(){
+			curr++;
+			var id = "div_"+curr;
+			var name = "段落"+curr;
+			var id1 = "ipt_"+curr+"_1";
+			var id2 = "ipt_"+curr+"_2";
+			var list = $("#d_list").append("<div id=\""+id+"\" class=\"control-group\"><label class=\"control-label\" for=\"focusedInput\">"+name+"</label><div class=\"controls\"><div><textarea style=\"height: 150px;width: 500px;\" id=\""+id1+"\" class=\"input-xlarge focused\" type=\"text\"placeholder=\"请输入内容\" ></textarea></div><div style=\"margin-top: 10px;\"><textarea style=\"height: 150px;width: 500px;\" id=\""+id2+"\" class=\"input-xlarge focused\" type=\"text\"placeholder=\"请输入解释\" ></textarea></div></div></div>");
+		}
+		
+		function sub_one(){
+			if(curr <=limit){
+				alert("不能少于当前段落")
+				return;
+			}
+			var id = "#div_"+curr;
+			$(id).remove();
+			curr--;
+		}
+		
+		function btn_ok() {
+			var name = $("#ipt_0").val();
+			name = $.trim(name);
+			if (name == "") {
+				alert("名称不能为空")
+				return;
+			}
+			var infos = "";
+			var isok = true;
+			$("#d_list").find("div[class='control-group']").each(function(index,obj){
+			    var msg = $(this).find("textarea").eq(0).html();
+			    var info = $(this).find("textarea").eq(1).html();
+			    msg = $.trim(msg);
+				if (msg == "") {
+					isok = false
+					return;
+				}
+				info = $.trim(info);
+				if (info == "") {
+					isok = false
+					return;
+				}
+			    infos += msg + "-" + info + ",";
+			  });
+			if(!isok){
+				alert("请填写完整信息")
+				return;
+			}
+			infos = infos.substring(0,infos.length-1)
+			var id = /*[[${data.id}]]*/;
+			$.post("/page/book/edit", {id:id, title: name, info: infos },
+			   function(obj){
+							if (obj.code == 0) {
+								window.location.href = "/bookManager";
+							} else {
+								alert(obj.message);
+							}
+			   },"json").error(function() { alert("提交失败！"); });
+			
+			
+		}
+		/*]]>*/
+	</script>
+</body>
+
+</html>

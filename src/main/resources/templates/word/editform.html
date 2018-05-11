@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8"></meta>
+<title th:text="${title}"></title>
+<!-- Bootstrap -->
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"
+	media="screen" />
+<link th:href="@{/css/bootstrap-responsive.min.css}" rel="stylesheet"
+	media="screen" />
+<link th:href="@{/css/styles.css}" rel="stylesheet" media="screen" />
+</head>
+
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container-fluid">
+				<a class="btn btn-navbar" data-toggle="collapse"
+					data-target=".nav-collapse"> <span class="icon-bar"></span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span>
+				</a> <a class="brand" th:text="${title}"></a>
+				<div class="nav-collapse collapse">
+					<ul class="nav pull-right">
+						<li class="dropdown"><a th:inline="text" href="#"
+							role="button" class="dropdown-toggle" data-toggle="dropdown">
+								<i class="icon-user"></i>你好，[[${name}]]<i class="caret"></i>
+
+						</a>
+							<ul class="dropdown-menu">
+								<li class="divider"></li>
+								<li><a tabindex="-1" href="/logout">退出登录</a></li>
+							</ul></li>
+					</ul>
+					<ul class="nav">
+					</ul>
+				</div>
+				<!--/.nav-collapse -->
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span3" id="sidebar">
+				<ul id="ul_left"
+					class="nav nav-list bs-docs-sidenav nav-collapse collapse">
+				</ul>
+			</div>
+			<!--/span-->
+			<div class="span9" id="content">
+				<!-- validation -->
+				<div class="row-fluid">
+					<!-- block -->
+					<div class="block">
+						<div class="navbar navbar-inner block-header">
+							<div class="muted pull-left">修改单词</div>
+						</div>
+						<div class="block-content collapse in">
+							<div class="span12">
+								<!-- BEGIN FORM-->
+								<form class="form-horizontal" id="upload"
+									enctype="multipart/form-data" method="post">
+									<fieldset>
+										<div class="control-group">
+											<label class="control-label" for="focusedInput">单词</label>
+											<div class="controls">
+												<div>
+													<input th:value="${data.wordEn}" name="name" id="ipt_0"
+														class="input-xlarge focused" type="text"
+														placeholder="请输入单词" />
+												</div>
+											</div>
+										</div>
+										<div class="control-group">
+											<label class="control-label" for="focusedInput">音标</label>
+											<div class="controls">
+												<div>
+													<input th:value="${data.speek}" name="name" id="ipt_1"
+														class="input-xlarge focused" type="text"
+														placeholder="请输入音标" />
+												</div>
+											</div>
+										</div>
+										<div class="control-group">
+											<label class="control-label" for="focusedInput">解释</label>
+											<div class="controls">
+												<div>
+													<input th:value="${data.wordCh}" name="name" id="ipt_2"
+														class="input-xlarge focused" type="text"
+														placeholder="请输入解释" />
+												</div>
+											</div>
+										</div>
+
+										<div class="form-actions">
+											<button onclick="btn_cancel()" type="button" class="btn">取&nbsp;&nbsp;&nbsp;&nbsp;消</button>
+											<button type="button" onclick="return btn_ok()"
+												class="btn btn-primary">修&nbsp;&nbsp;&nbsp;&nbsp;改</button>
+										</div>
+									</fieldset>
+								</form>
+								<!-- END FORM-->
+							</div>
+						</div>
+					</div>
+					<!-- /block -->
+				</div>
+				<!-- /validation -->
+
+
+			</div>
+		</div>
+	</div>
+	<!--/.fluid-container-->
+	<link th:href="@{/vendors/datepicker.css}" rel="stylesheet"
+		media="screen" />
+	<link th:href="@{/vendors/uniform.default.css}" rel="stylesheet"
+		media="screen" />
+	<link th:href="@{/vendors/chosen.min.css}" rel="stylesheet"
+		media="screen" />
+
+	<link th:href="@{/vendors/wysiwyg/bootstrap-wysihtml5.css}"
+		rel="stylesheet" media="screen" />
+
+	<script th:src="@{/js/jquery-1.9.1.min.js}"></script>
+	<script th:src="@{/js/bootstrap.min.js}"></script>
+
+	<script th:src="@{/vendors/jquery.uniform.min.js}"></script>
+	<script th:src="@{/vendors/chosen.jquery.min.js}"></script>
+	<script th:src="@{/vendors/bootstrap-datepicker.js}"></script>
+
+	<script th:src="@{/vendors/wysiwyg/wysihtml5-0.3.0.js}"></script>
+	<script th:src="@{/vendors/wysiwyg/bootstrap-wysihtml5.js}"></script>
+
+	<script th:src="@{/vendors/wizard/jquery.bootstrap.wizard.min.js}"></script>
+
+	<script type="text/javascript"
+		th:src="@{/vendors/jquery-validation/dist/jquery.validate.min.js}"></script>
+	<script th:src="@{/assets/form-validation.js}"></script>
+
+	<script th:src="@{/assets/scripts.js}"></script>
+	<script th:inline="javascript">
+	/*<![CDATA[*/
+		jQuery(document).ready(function() {
+			$("#ul_left").html([[${left}]])
+			var element = $(".input-ghost");
+	          element.change(function(){
+	            element.next(element).find('input').val((element.val()).split('\\').pop());
+	          });
+	          $(this).find("button.btn-choose").click(function(){
+	            element.click();
+	          });
+		});
+
+		$(function() {
+			$(".datepicker").datepicker();
+			$(".uniform_on").uniform();
+			$(".chzn-select").chosen();
+			$('.textarea').wysihtml5();
+
+			$('#rootwizard').bootstrapWizard(
+					{
+						onTabShow : function(tab, navigation, index) {
+							var $total = navigation.find('li').length;
+							var $current = index + 1;
+							var $percent = ($current / $total) * 100;
+							$('#rootwizard').find('.bar').css({
+								width : $percent + '%'
+							});
+							// If it's the last tab then hide the last button and show the finish instead
+							if ($current >= $total) {
+								$('#rootwizard').find('.pager .next').hide();
+								$('#rootwizard').find('.pager .finish').show();
+								$('#rootwizard').find('.pager .finish')
+										.removeClass('disabled');
+							} else {
+								$('#rootwizard').find('.pager .next').show();
+								$('#rootwizard').find('.pager .finish').hide();
+							}
+						}
+					});
+			$('#rootwizard .finish').click(function() {
+				alert('Finished!, Starting over!');
+				$('#rootwizard').find("a[href*='tab1']").trigger('click');
+			});
+			
+			
+			
+		});
+		
+		function btn_cancel() {
+			history.back();
+		}
+		
+		function btn_ok() {
+			var word = $("#ipt_0").val();
+			var speek = $("#ipt_1").val();
+			var cn = $("#ipt_2").val();
+			word = $.trim(word);
+			if (word == "") {
+				alert("单词不能为空")
+				return;
+			}
+			cn = $.trim(cn);
+			if (cn == "") {
+				alert("解释不能为空")
+				return;
+			}
+			var id = /*[[${data.id}]]*/;
+			$.post("/page/word/edit", { id:id,speek: speek, word: word,cn:cn },
+					   function(obj){
+									if (obj.code == 0) {
+										window.location.href = "/wordManager";
+									} else {
+										alert(obj.message);
+									}
+					   },"json").error(function() { alert("提交失败！"); });
+			
+		}
+		/*]]>*/
+	</script>
+</body>
+
+</html>
